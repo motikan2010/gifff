@@ -12,6 +12,8 @@ class GitHubLoginController extends Controller
 
     private $userService;
 
+    private $redirectTo = '/account';
+
     public function __construct(GitHubUserService $userService)
     {
         $this->userService = $userService;
@@ -38,6 +40,6 @@ class GitHubLoginController extends Controller
 
         $loginUser = $this->userService->getUser($user->id, $user->nickname);
         $this->userService->login($loginUser);
-        return redirect('/');
+        return redirect($this->redirectTo);
     }
 }
