@@ -13,8 +13,12 @@
 
 Route::get('/', 'IndexController@index')->name('login');
 
-Route::get('account', 'AccountController@index');
+// マイページ
+Route::get('account', 'AccountController@indexPage');
+Route::get('account/token', 'AccountController@tokenPage');
+Route::post('account/token', 'AccountController@createToken');
 
+// ログイン
 Route::get('login', 'Auth\LoginController@index');
 Route::get('login/github', 'Auth\GitHubLoginController@redirectToProvider');
 Route::get('login/github/callback', 'Auth\GitHubLoginController@handleProviderCallback');
