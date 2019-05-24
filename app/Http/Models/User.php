@@ -13,4 +13,8 @@ class User extends Authenticatable
     protected $fillable = [
         'login_type', 'login_id', 'name'
     ];
+
+    public function tokens() {
+        return $this->hasMany('App\Http\Models\TokenInformation', 'user_id', 'id');
+    }
 }
