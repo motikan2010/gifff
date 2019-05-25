@@ -28,7 +28,6 @@ class ImageController extends Controller
             ];
         } else {
             $errors = [];
-            // var_dump( $validator->errors()->messages() );exit();
             foreach ( $validator->errors()->messages() as $param => $message) {
                 $errors[] = [
                     'param' => $param,
