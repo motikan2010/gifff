@@ -22,3 +22,8 @@ Route::post('account/token', 'AccountController@createToken');
 Route::get('login', 'Auth\LoginController@index');
 Route::get('login/github', 'Auth\GitHubLoginController@redirectToProvider');
 Route::get('login/github/callback', 'Auth\GitHubLoginController@handleProviderCallback');
+
+// ファイル
+Route::group(['prefix' => 'api'], function () {
+    Route::post('image/upload', 'Api\ImageController@upload');
+});
