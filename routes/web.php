@@ -23,6 +23,19 @@ Route::get('login', 'Auth\LoginController@index');
 Route::get('login/github', 'Auth\GitHubLoginController@redirectToProvider');
 Route::get('login/github/callback', 'Auth\GitHubLoginController@handleProviderCallback');
 
+// 画像
+Route::group(['prefix' => 'image'], function () {
+    Route::get('upload', 'ImageController@uploadPage');
+    Route::post('upload', 'ImageController@upload');
+    Route::get('list', 'ImageController@listPage');
+    Route::get('create', 'ImageController@createGifPage');
+});
+
+
+/**
+ * API
+ */
+
 // ファイル
 Route::group(['prefix' => 'api'], function () {
     Route::post('image/upload', 'Api\ImageController@upload');
