@@ -4,11 +4,18 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Services\ImageService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 
 class ImageController extends Controller
 {
+
+    private $imageService;
+
+    public function __construct(ImageService $imageService)
+    {
+        $this->imageService = $imageService;
+    }
 
     /**
      * ファイルアップロード
@@ -19,16 +26,16 @@ class ImageController extends Controller
     public function upload(Request $request) {
 
         // バリデーション
-        $validator = $this->validationUpload($request);
+        $validator = $this->imageService->validationUpload($request);
         if ( !$validator->fails() ) {
-            $filename = $request->file->store('public/image');
-
+            $filename = $this->imageService->singleUpload($request->file);
             return [
                 'fileName' => $filename
             ];
+
         } else {
             $errors = [];
-            foreach ( $validator->errors()->messages() as $param => $message) {
+            foreach ( $validator->errors()->messages() as $param => $message ) {
                 $errors[] = [
                     'param' => $param,
                     'message' => $message,
@@ -39,23 +46,5 @@ class ImageController extends Controller
                 'errors' => $errors,
             ];
         }
-    }
-
-    private function validationUpload(Request $request) {
-        $validator = Validator::make($request->all(), [
-            'file' => [
-                // 必須
-                'required',
-                // アップロードされたファイルであること
-                'file',
-                // 画像ファイルであること
-                'image',
-                // MIMEタイプを指定
-                'mimes:jpeg,png',
-                // 最大縦横1000px
-                'dimensions:max_width=10000,max_height=10000',
-            ]
-        ]);
-        return $validator;
     }
 }
