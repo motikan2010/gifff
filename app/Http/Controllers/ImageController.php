@@ -41,6 +41,16 @@ class ImageController extends Controller
     }
 
     public function createGifPage() {
-        return view('image.3_1_create_gif');
+        $images = $this->imageService->getMyImageList(Auth::user()->id);
+        return view('image.3_1_create_gif')->with(['images' => $images]);
     }
+
+
+    public function createGif(Request $request) {
+        $imageIdArr = $request->input('image_id');
+
+        // TODO バリデーション ユーザの検証
+        $images = $this->imageService->createGif($imageIdArr);
+    }
+
 }
