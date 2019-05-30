@@ -5,15 +5,24 @@ namespace App\Http\Services;
 
 
 use App\Http\Models\Image;
+use App\Http\Repository\ImageRepository;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use GifCreator\GifCreator;
 
 define('UPLOAD_PATH', 'public/img/upload');
 
 class ImageService
 {
+
+    private $imageRepo;
+
+    public function __construct(ImageRepository $imageRepo)
+    {
+        $this->imageRepo = $imageRepo;
+    }
 
     public function getMyImageList(int $userId) {
         $images = Image::where('user_id', $userId)->get();
@@ -114,6 +123,25 @@ class ImageService
             ]
         ]);
         return $validator;
+    }
+
+    /**
+     * @param array $imageIds
+     */
+    public function createGif(array $imageIds) {
+        $imageArr = $this->imageRepo->findByIdIn($imageIds);
+
+        $frames = [];
+        foreach ( $imageArr as $image) {
+            $frames[] = storage_path('app') . '/' . UPLOAD_PATH . '/' .$image->filename;
+        }
+
+        $gc = new GifCreator();
+        $durations = array(40, 80, 40, 20);
+        $gc->create($frames, $durations, 0);
+        $gifBinary = $gc->getGif();
+
+        // TODO 作成したGIFを返却
     }
 
 }

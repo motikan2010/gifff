@@ -29,6 +29,7 @@ Route::group(['prefix' => 'image'], function () {
     Route::post('upload', 'ImageController@upload');
     Route::get('list', 'ImageController@listPage');
     Route::get('create', 'ImageController@createGifPage');
+    Route::post('create', 'ImageController@createGif');
 });
 
 
